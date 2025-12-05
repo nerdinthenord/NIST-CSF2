@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Assessment for {{ run.organization_name }}</h2>
+
+<p>Rate each statement on this scale:</p>
+<ul>
+  <li>1 = No controls in place</li>
+  <li>2 = Some controls defined</li>
+  <li>3 = Medium controls, partially implemented</li>
+  <li>4 = Developed controls, consistently applied</li>
+  <li>5 = Mature controls, measured and improved</li>
+</ul>
+
+<form method="post">
+  <table border="1" cellpadding="4" cellspacing="0">
+    <tr>
+      <th>#</th>
+      <th>Function</th>
+      <th>Category</th>
+      <th>Topic</th>
+      <th>Statement</th>
+      <th>Score</th>
+    </tr>
+    {% for q in questions %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>{{ q.requirement.function_group }}</td>
+      <td>{{ q.requirement.category_id }}</td>
+      <td>{{ q.requirement.title }}</td>
+      <td>{{ q.requirement.text }}</td>
+      <td>
+        {% for s in range(1, 6) %}
+          <label>
+            <input type="radio" name="q_{{ q.id }}" value="{{ s }}"> {{ s }}
+          </label>
+        {% endfor %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <br>
+  <button type="submit">Submit and view report</button>
+</form>
+
+{% endblock %}

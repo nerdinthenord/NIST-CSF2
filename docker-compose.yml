@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  csf2bot:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - csf2_data:/data
+
+volumes:
+  csf2_data:

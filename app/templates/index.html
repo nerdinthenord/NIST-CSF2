@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Start a new assessment</h2>
+
+<form method="post" action="/start">
+  <label>Organization name</label><br>
+  <input type="text" name="organization_name" required style="width: 300px;"><br><br>
+
+  <label>Your name (optional)</label><br>
+  <input type="text" name="created_by" style="width: 300px;"><br><br>
+
+  <button type="submit">Start assessment</button>
+</form>
+
+{% endblock %}

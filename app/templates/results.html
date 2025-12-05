@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Assessment results for {{ scores.organization_name }}</h2>
+<p>Date: {{ scores.created_at }}</p>
+<p>Overall maturity: {{ "%.2f"|format(scores.overall_maturity) }} / 5</p>
+
+<h3>Function summary</h3>
+<canvas id="funcChart" width="600" height="300"></canvas>
+
+<table border="1" cellpadding="4" cellspacing="0">
+  <tr>
+    <th>Function</th>
+    <th>Average score</th>
+  </tr>
+  {% for f in scores.functions %}
+  <tr>
+    <td>{{ f.function_group }}</td>
+    <td>{{ "%.2f"|format(f.average_score) }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<h3>Subcategory detail</h3>
+<table border="1" cellpadding="4" cellspacing="0">
+  <tr>
+    <th>Function</th>
+    <th>Category</th>
+    <th>Subcategory</th>
+    <th>Topic</th>
+    <th>Average score</th>
+  </tr>
+  {% for s in scores.subcategories %}
+  <tr>
+    <td>{{ s.function_group }}</td>
+    <td>{{ s.category_id }}</td>
+    <td>{{ s.subcategory_code }}</td>
+    <td>{{ s.title }}</td>
+    <td>{{ "%.2f"|format(s.average_score) }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const funcData = {{ scores.functions | tojson }};
+  const labels = funcData.map(f => f.function_group);
+  const values = funcData.map(f => f.average_score);
+
+  const ctx = document.getElementById('funcChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Average maturity by function',
+        data: values,
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          suggestedMin: 0,
+          suggestedMax: 5
+        }
+      }
+    }
+  });
+</script>
+
+{% endblock %}
